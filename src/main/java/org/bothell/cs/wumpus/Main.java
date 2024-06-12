@@ -1,13 +1,27 @@
-package org.bothell.cs.wumpus;
 
-public class Main{
+public class Main {
   public static void main(String[] args){
 
-    Dungeon d = new Dungeon();
-    new MazeGen(d);
-
-    new Controller();
+    //new GUI().init();
     
-    System.out.println("OH no!!!!!!!");
+
+    
+    // QUESTIONS ---------------------------------------------------------------
+    
+    System.out.println("\nTHE QUESTIONS");
+    System.out.println(new Trivia().getQuestions());
+    
+    
+    // MAP ---------------------------------------------------------------------
+    Map m = new Map("map");
+    Cave c = new Cave(m.getLocations());
+
+    System.out.println("\nTHE CAVE");
+    System.out.println(c);
+
+    new Controller(c);
+    
+    System.out.println("Hello world!");
   }
+
 }

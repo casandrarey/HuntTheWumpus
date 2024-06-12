@@ -1,53 +1,44 @@
-package org.bothell.cs.wumpus;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.imageio.*;
 
 public class GUI extends JFrame{
+
+  private int height = 800;
+  private int width = 800;
+  private Controller c;
   
-  private Location[] loi;
-
   public GUI(){
-    setTitle("Wumpus");
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(640, 480);
-    setLayout(new FlowLayout());
+    //this.c = new Controller();
+  }
 
-    add(new WB());
+  public GUI setController(Controller controller){
+    this.c = controller;
     
-    setResizable(true);
-    setLocationRelativeTo(null);
-    setVisible(true);
-  }
-
-}
-
-class WB extends JButton implements ActionListener{
-
-  WB(){
-    int width = 200;
-    int height = 300;
-    String pic = "/pirate.jpg";
-
-    setPreferredSize(new Dimension(width, height));
-    addActionListener( this );
+    JButton[][]  btns = c.getRoomButtons();
+    HexagonalLayout g = new HexagonalLayout (btns.length * btns[0].length);
+    JPanel          p = new JPanel(g);
     
-    try {
-      Image img = ImageIO.read(getClass().getResource(pic));
-      Image scale = img.getScaledInstance( width, height, Image.SCALE_SMOOTH ) ;
-      setIcon(new ImageIcon(scale));
-    } catch (Exception ex) {
-      System.out.println(ex);
-    } 
+    for(JButton[] row: btns){
+      for(JButton b:row) if(b != null){ 
+        Location l = (Location)b;
+        l.setController(c);
+        p.add(b);
+      }
+    }
+    this.add(p);
+    init();
+    
+    return this;
   }
-
-  @Override
-  public void actionPerformed(ActionEvent e){
-    System.out.println("-----------");
-    System.out.println("vvvvvvv");
-    System.out.println();
+  
+  public void init(){
+    this.setSize(new Dimension(width, height));
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setVisible(true);
   }
+  
 }
-
